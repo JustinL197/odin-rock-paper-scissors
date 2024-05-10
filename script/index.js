@@ -1,6 +1,6 @@
 //randomize the computer's selection
 function getComputerChoice(){
-    resultArray = ['rock', 'paper','scissors'];
+    resultArray = ['ROCK', 'PAPER','SCISSORS'];
     let randomNumber = Math.floor(Math.random() * 3);
 
     return resultArray[randomNumber];
@@ -10,16 +10,16 @@ function getComputerChoice(){
 
 function playRound(playerSelection, computerSelection){
     const gameResult = {
-        rock: 'scissors',
-        scissors: 'paper',
-        paper: 'rock',
+        ROCK: 'SCISSORS',
+        SCISSORS: 'PAPER',
+        PAPER: 'ROCK',
     }
 
-    if (playerSelection.toLowerCase() === computerSelection.toLowerCase()){
+    if (playerSelection === computerSelection){
         return 'Tie game!';
     }
 
-    else if (computerSelection.toLowerCase() === gameResult[playerSelection.toLowerCase()].toLowerCase()){
+    else if (computerSelection === gameResult[playerSelection]){
         return `Player wins!`;        
     }
 
@@ -28,31 +28,45 @@ function playRound(playerSelection, computerSelection){
     }
 }
 
-function playGame(){
-    let playerScore = 0;
-    let computerScore = 0;
+const container = document.querySelector('.selection-box');
+const messageBox = document.querySelector('.message-box');
 
-    for (let i = 0; i < 5; i++){
-        let playerSelection = prompt('Rock, Paper, or Scissors?');
-        const computerSelection = getComputerChoice();
-        const game = playRound(playerSelection, computerSelection);
+const rockButton = document.createElement('button');
+rockButton.className = 'selection-button';
+rockButton.innerText = 'ROCK';
+rockButton.addEventListener('click', playGame);
 
-        console.log(game);
+const paperButton = document.createElement('button');
+paperButton.className = 'selection-button';
+paperButton.innerText = 'PAPER';
+paperButton.addEventListener('click', playGame);
 
-        if (game === 'Player wins!'){
-            playerScore += 1;
-        } else if (game === 'Computer wins!'){
-            computerScore += 1;
-        }
-    }
+const scissorsButton = document.createElement('button');
+scissorsButton.className = 'selection-button';
+scissorsButton.innerText = 'SCISSORS';
+scissorsButton.addEventListener('click', playGame);
 
-    if (playerScore > computerScore){
-        console.log(`Player wins with a score of ${playerScore} to ${computerScore}`);
-    } else if (computerScore > playerScore){
-        console.log(`Computer wins with a score of ${computerScore} to ${playerScore}`);
-    } else{
-        console.log('Tie Game!')
-    }
+container.appendChild(rockButton);
+container.appendChild(paperButton);
+container.appendChild(scissorsButton);
+
+
+function playGame(event){
+    clearMessage();   
+
+    const playerSelection = event.target.innerText;
+    const computerSelection = getComputerChoice();
+
+    const resultMessage = document.createElement('p');
+    console.log(playerSelection);
+    resultMessage.className = 'message-box__result-message'
+    resultMessage.innerText = playRound(playerSelection, computerSelection);
+       
+    messageBox.append(resultMessage);
 }
 
-playGame();
+function clearMessage(){
+    while (messageBox.firstChild){
+        messageBox.removeChild(messageBox.firstChild);
+    }
+}
